@@ -24,11 +24,14 @@ pub enum FileType {
     MostlyQ4_2,
     /// All tensors are mostly stored as `Q4_3`, except for the 1D tensors (32-bit).
     MostlyQ4_3,
-
+    /// All tensors are mostly stored as `Q5_0`, except for the 1D tensors (32-bit).
     MostlyQ5_0,
+    /// All tensors are mostly stored as `Q5_1`, except for the 1D tensors (32-bit).
     MostlyQ5_1,
+    /// All tensors are mostly stored as `Q8_0`, except for the 1D tensors (32-bit).
     MostlyQ8_0,
-    MostlyQ8_1,    
+    /// All tensors are mostly stored as `Q8_1`, except for the 1D tensors (32-bit).
+    MostlyQ8_1,
 }
 impl From<FileType> for i32 {
     fn from(value: FileType) -> Self {
@@ -42,7 +45,7 @@ impl From<FileType> for i32 {
             FileType::MostlyQ5_0 => 6,
             FileType::MostlyQ5_1 => 7,
             FileType::MostlyQ8_0 => 8,
-            FileType::MostlyQ8_1 => 9, 
+            FileType::MostlyQ8_1 => 9,
         }
     }
 }

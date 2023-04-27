@@ -39,8 +39,14 @@ pub enum Type {
     Q4_2,
     /// Quantized 4-bit (type 3).
     Q4_3,
+    /// Quantized 5-bit (type 0).
+    Q5_0,
+    /// Quantized 5-bit (type 1); used by GPTQ.
+    Q5_1,
     /// Quantized 8-bit (type 0).
     Q8_0,
+    /// Quantized 8-bit (type 1). used by GPTQ.
+    Q8_1,
     /// Integer 32-bit.
     I32,
     /// Float 16-bit.
@@ -48,6 +54,45 @@ pub enum Type {
     /// Float 32-bit.
     F32,
 }
+
+impl TryFrom<i32> for Type {
+    type Error = ();
+
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Type::F32),
+            1 => Ok(Type::F16),
+            2 => Ok(Type::Q4_0),
+            3 => Ok(Type::Q4_1),
+            4 => Ok(Type::Q4_2),
+            5 => Ok(Type::Q4_3),
+            6 => Ok(Type::Q5_0),
+            7 => Ok(Type::Q5_1),
+            8 => Ok(Type::Q8_0),
+            9 => Ok(Type::Q8_1),
+            _ => Err(()),
+        }
+    }
+}
+
+impl From<Type> for i32 {
+    fn from(value: Type) -> Self {
+        match value {
+            Type::F32 => 0,
+            Type::F16 => 1,
+            Type::Q4_0 => 2,
+            Type::Q4_1 => 3,
+            Type::Q4_2 => 4,
+            Type::Q4_3 => 5,
+            Type::Q5_0 => 6,
+            Type::Q5_1 => 7,
+            Type::Q8_0 => 8,
+            Type::Q8_1 => 9,
+            Type::I32 => 10, // TODO: check this
+        }
+    }
+}
+
 impl From<Type> for ggml_sys::ggml_type {
     fn from(t: Type) -> Self {
         match t {
@@ -55,7 +100,10 @@ impl From<Type> for ggml_sys::ggml_type {
             Type::Q4_1 => ggml_sys::ggml_type_GGML_TYPE_Q4_1,
             Type::Q4_2 => ggml_sys::ggml_type_GGML_TYPE_Q4_2,
             Type::Q4_3 => ggml_sys::ggml_type_GGML_TYPE_Q4_3,
+            Type::Q5_0 => ggml_sys::ggml_type_GGML_TYPE_Q5_0,
+            Type::Q5_1 => ggml_sys::ggml_type_GGML_TYPE_Q5_1,
             Type::Q8_0 => ggml_sys::ggml_type_GGML_TYPE_Q8_0,
+            Type::Q8_1 => ggml_sys::ggml_type_GGML_TYPE_Q8_1,
             Type::I32 => ggml_sys::ggml_type_GGML_TYPE_I32,
             Type::F16 => ggml_sys::ggml_type_GGML_TYPE_F16,
             Type::F32 => ggml_sys::ggml_type_GGML_TYPE_F32,
@@ -70,7 +118,10 @@ impl TryFrom<ggml_sys::ggml_type> for Type {
             ggml_sys::ggml_type_GGML_TYPE_Q4_1 => Ok(Type::Q4_1),
             ggml_sys::ggml_type_GGML_TYPE_Q4_2 => Ok(Type::Q4_2),
             ggml_sys::ggml_type_GGML_TYPE_Q4_3 => Ok(Type::Q4_3),
+            ggml_sys::ggml_type_GGML_TYPE_Q5_0 => Ok(Type::Q5_0),
+            ggml_sys::ggml_type_GGML_TYPE_Q5_1 => Ok(Type::Q5_1),
             ggml_sys::ggml_type_GGML_TYPE_Q8_0 => Ok(Type::Q8_0),
+            ggml_sys::ggml_type_GGML_TYPE_Q8_1 => Ok(Type::Q8_1),
             ggml_sys::ggml_type_GGML_TYPE_I32 => Ok(Type::I32),
             ggml_sys::ggml_type_GGML_TYPE_F16 => Ok(Type::F16),
             ggml_sys::ggml_type_GGML_TYPE_F32 => Ok(Type::F32),
@@ -85,7 +136,10 @@ impl std::fmt::Display for Type {
             Type::Q4_1 => write!(f, "q4_1"),
             Type::Q4_2 => write!(f, "q4_2"),
             Type::Q4_3 => write!(f, "q4_3"),
+            Type::Q5_0 => write!(f, "q5_0"),
+            Type::Q5_1 => write!(f, "q5_1"),
             Type::Q8_0 => write!(f, "q8_0"),
+            Type::Q8_1 => write!(f, "q8_1"),
             Type::I32 => write!(f, "i32"),
             Type::F16 => write!(f, "f16"),
             Type::F32 => write!(f, "f32"),

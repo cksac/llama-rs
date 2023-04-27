@@ -5,6 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(unused)]
 
+pub const GGML_FILE_MAGIC: u32 = 1734831468;
+pub const GGML_FILE_VERSION: u32 = 1;
 pub const GGML_MAX_DIMS: u32 = 4;
 pub const GGML_MAX_NODES: u32 = 4096;
 pub const GGML_MAX_PARAMS: u32 = 16;
@@ -29,12 +31,15 @@ pub const ggml_type_GGML_TYPE_Q4_0: ggml_type = 2;
 pub const ggml_type_GGML_TYPE_Q4_1: ggml_type = 3;
 pub const ggml_type_GGML_TYPE_Q4_2: ggml_type = 4;
 pub const ggml_type_GGML_TYPE_Q4_3: ggml_type = 5;
-pub const ggml_type_GGML_TYPE_Q8_0: ggml_type = 6;
-pub const ggml_type_GGML_TYPE_I8: ggml_type = 7;
-pub const ggml_type_GGML_TYPE_I16: ggml_type = 8;
-pub const ggml_type_GGML_TYPE_I32: ggml_type = 9;
-pub const ggml_type_GGML_TYPE_COUNT: ggml_type = 10;
-pub type ggml_type = ::std::os::raw::c_int;
+pub const ggml_type_GGML_TYPE_Q5_0: ggml_type = 6;
+pub const ggml_type_GGML_TYPE_Q5_1: ggml_type = 7;
+pub const ggml_type_GGML_TYPE_Q8_0: ggml_type = 8;
+pub const ggml_type_GGML_TYPE_Q8_1: ggml_type = 9;
+pub const ggml_type_GGML_TYPE_I8: ggml_type = 10;
+pub const ggml_type_GGML_TYPE_I16: ggml_type = 11;
+pub const ggml_type_GGML_TYPE_I32: ggml_type = 12;
+pub const ggml_type_GGML_TYPE_COUNT: ggml_type = 13;
+pub type ggml_type = ::std::os::raw::c_uint;
 pub const ggml_op_GGML_OP_NONE: ggml_op = 0;
 pub const ggml_op_GGML_OP_DUP: ggml_op = 1;
 pub const ggml_op_GGML_OP_ADD: ggml_op = 2;
@@ -74,7 +79,7 @@ pub const ggml_op_GGML_OP_FLASH_FF: ggml_op = 35;
 pub const ggml_op_GGML_OP_MAP_UNARY: ggml_op = 36;
 pub const ggml_op_GGML_OP_MAP_BINARY: ggml_op = 37;
 pub const ggml_op_GGML_OP_COUNT: ggml_op = 38;
-pub type ggml_op = ::std::os::raw::c_int;
+pub type ggml_op = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct ggml_object {
@@ -1010,12 +1015,12 @@ extern "C" {
 }
 pub const ggml_opt_type_GGML_OPT_ADAM: ggml_opt_type = 0;
 pub const ggml_opt_type_GGML_OPT_LBFGS: ggml_opt_type = 1;
-pub type ggml_opt_type = ::std::os::raw::c_int;
+pub type ggml_opt_type = ::std::os::raw::c_uint;
 pub const ggml_linesearch_GGML_LINESEARCH_DEFAULT: ggml_linesearch = 1;
 pub const ggml_linesearch_GGML_LINESEARCH_BACKTRACKING_ARMIJO: ggml_linesearch = 0;
 pub const ggml_linesearch_GGML_LINESEARCH_BACKTRACKING_WOLFE: ggml_linesearch = 1;
 pub const ggml_linesearch_GGML_LINESEARCH_BACKTRACKING_STRONG_WOLFE: ggml_linesearch = 2;
-pub type ggml_linesearch = ::std::os::raw::c_int;
+pub type ggml_linesearch = ::std::os::raw::c_uint;
 pub const ggml_opt_result_GGML_OPT_OK: ggml_opt_result = 0;
 pub const ggml_opt_result_GGML_OPT_DID_NOT_CONVERGE: ggml_opt_result = 1;
 pub const ggml_opt_result_GGML_OPT_NO_CONTEXT: ggml_opt_result = 2;
@@ -1408,6 +1413,33 @@ extern "C" {
     ) -> usize;
 }
 extern "C" {
+    pub fn ggml_quantize_q5_0(
+        src: *const f32,
+        dst: *mut ::std::os::raw::c_void,
+        n: ::std::os::raw::c_int,
+        k: ::std::os::raw::c_int,
+        hist: *mut i64,
+    ) -> usize;
+}
+extern "C" {
+    pub fn ggml_quantize_q5_1(
+        src: *const f32,
+        dst: *mut ::std::os::raw::c_void,
+        n: ::std::os::raw::c_int,
+        k: ::std::os::raw::c_int,
+        hist: *mut i64,
+    ) -> usize;
+}
+extern "C" {
+    pub fn ggml_quantize_q8_0(
+        src: *const f32,
+        dst: *mut ::std::os::raw::c_void,
+        n: ::std::os::raw::c_int,
+        k: ::std::os::raw::c_int,
+        hist: *mut i64,
+    ) -> usize;
+}
+extern "C" {
     pub fn ggml_quantize_chunk(
         type_: ggml_type,
         src: *const f32,
@@ -1484,6 +1516,7 @@ pub struct quantize_fns_t {
     pub quantize_row_q_reference: quantize_row_q_t,
     pub quantize_row_q_dot: quantize_row_q_t,
     pub vec_dot_q: vec_dot_q_t,
+    pub vec_dot_type: ggml_type,
 }
 #[test]
 fn bindgen_test_layout_quantize_fns_t() {
@@ -1491,7 +1524,7 @@ fn bindgen_test_layout_quantize_fns_t() {
     let ptr = UNINIT.as_ptr();
     assert_eq!(
         ::std::mem::size_of::<quantize_fns_t>(),
-        40usize,
+        48usize,
         concat!("Size of: ", stringify!(quantize_fns_t))
     );
     assert_eq!(
@@ -1547,6 +1580,16 @@ fn bindgen_test_layout_quantize_fns_t() {
             stringify!(quantize_fns_t),
             "::",
             stringify!(vec_dot_q)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).vec_dot_type) as usize - ptr as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(quantize_fns_t),
+            "::",
+            stringify!(vec_dot_type)
         )
     );
 }

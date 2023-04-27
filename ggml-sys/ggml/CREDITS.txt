@@ -1,6 +1,6 @@
-Vendored version: https://github.com/ggerganov/llama.cpp/commit/0e018fe008eacebdbcfa2d61b6c988c245c961cd
+Vendored version: https://github.com/ggerganov/llama.cpp/commit/0b2da20538d01926b77ea237dd1c930c4d20b686
 For convenience, changes involved in this sync:
-https://github.com/ggerganov/llama.cpp/compare/74f5899df4a6083fc467b620baa1cf821e37799d..0e018fe008eacebdbcfa2d61b6c988c245c961cd
+https://github.com/ggerganov/llama.cpp/compare/0e018fe008eacebdbcfa2d61b6c988c245c961cd..0b2da20538d01926b77ea237dd1c930c4d20b686
 
 The ggml.c and ggml.h files are distributed under the terms of the MIT license.
 Credit goes to the original authors: Copyright (c) 2023 Georgi Gerganov
