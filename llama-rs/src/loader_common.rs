@@ -27,6 +27,11 @@ pub enum FileType {
     MostlyQ4_2,
     /// All tensors are mostly stored as `Q4_3`, except for the 1D tensors (32-bit).
     MostlyQ4_3,
+
+    MostlyQ5_0,
+    MostlyQ5_1,
+    MostlyQ8_0,
+    MostlyQ8_1,    
 }
 impl From<FileType> for i32 {
     fn from(value: FileType) -> Self {
@@ -38,6 +43,10 @@ impl From<FileType> for i32 {
             FileType::MostlyQ4_1SomeF16 => 4,
             FileType::MostlyQ4_2 => 5,
             FileType::MostlyQ4_3 => 6,
+            FileType::MostlyQ5_0 => 7,
+            FileType::MostlyQ5_1 => 8,
+            FileType::MostlyQ8_0 => 9,
+            FileType::MostlyQ8_1 => 10, 
         }
     }
 }
@@ -53,6 +62,10 @@ impl TryFrom<i32> for FileType {
             4 => Ok(FileType::MostlyQ4_1SomeF16),
             5 => Ok(FileType::MostlyQ4_2),
             6 => Ok(FileType::MostlyQ4_3),
+            7 => Ok(FileType::MostlyQ5_0),
+            8 => Ok(FileType::MostlyQ5_1),
+            9 => Ok(FileType::MostlyQ8_0),
+            10 => Ok(FileType::MostlyQ8_1),
             _ => Err(()),
         }
     }
@@ -67,6 +80,10 @@ impl Display for FileType {
             FileType::MostlyQ4_1SomeF16 => write!(f, "q4_1_with_f16"),
             FileType::MostlyQ4_2 => write!(f, "q4_2"),
             FileType::MostlyQ4_3 => write!(f, "q4_3"),
+            FileType::MostlyQ5_0 => write!(f, "q5_0"),
+            FileType::MostlyQ5_1 => write!(f, "q5_1"),
+            FileType::MostlyQ8_0 => write!(f, "q8_0"),
+            FileType::MostlyQ8_1 => write!(f, "q8_1"),
         }
     }
 }
