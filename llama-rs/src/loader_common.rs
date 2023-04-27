@@ -20,9 +20,6 @@ pub enum FileType {
     MostlyQ4_0,
     /// All tensors are mostly stored as `Q4_1`, except for the 1D tensors (32-bit)
     MostlyQ4_1,
-    /// All tensors are mostly stored as `Q4_1`, except for the 1D tensors (32-bit)
-    /// and the `tok_embeddings.weight` (f16) and `output.weight` tensors (f16).
-    MostlyQ4_1SomeF16,
     /// All tensors are mostly stored as `Q4_2`, except for the 1D tensors (32-bit).
     MostlyQ4_2,
     /// All tensors are mostly stored as `Q4_3`, except for the 1D tensors (32-bit).
@@ -40,13 +37,12 @@ impl From<FileType> for i32 {
             FileType::MostlyF16 => 1,
             FileType::MostlyQ4_0 => 2,
             FileType::MostlyQ4_1 => 3,
-            FileType::MostlyQ4_1SomeF16 => 4,
-            FileType::MostlyQ4_2 => 5,
-            FileType::MostlyQ4_3 => 6,
-            FileType::MostlyQ5_0 => 7,
-            FileType::MostlyQ5_1 => 8,
-            FileType::MostlyQ8_0 => 9,
-            FileType::MostlyQ8_1 => 10, 
+            FileType::MostlyQ4_2 => 4,
+            FileType::MostlyQ4_3 => 5,
+            FileType::MostlyQ5_0 => 6,
+            FileType::MostlyQ5_1 => 7,
+            FileType::MostlyQ8_0 => 8,
+            FileType::MostlyQ8_1 => 9, 
         }
     }
 }
@@ -59,13 +55,12 @@ impl TryFrom<i32> for FileType {
             1 => Ok(FileType::MostlyF16),
             2 => Ok(FileType::MostlyQ4_0),
             3 => Ok(FileType::MostlyQ4_1),
-            4 => Ok(FileType::MostlyQ4_1SomeF16),
-            5 => Ok(FileType::MostlyQ4_2),
-            6 => Ok(FileType::MostlyQ4_3),
-            7 => Ok(FileType::MostlyQ5_0),
-            8 => Ok(FileType::MostlyQ5_1),
-            9 => Ok(FileType::MostlyQ8_0),
-            10 => Ok(FileType::MostlyQ8_1),
+            4 => Ok(FileType::MostlyQ4_2),
+            5 => Ok(FileType::MostlyQ4_3),
+            6 => Ok(FileType::MostlyQ5_0),
+            7 => Ok(FileType::MostlyQ5_1),
+            8 => Ok(FileType::MostlyQ8_0),
+            9 => Ok(FileType::MostlyQ8_1),
             _ => Err(()),
         }
     }
@@ -77,7 +72,6 @@ impl Display for FileType {
             FileType::MostlyF16 => write!(f, "f16"),
             FileType::MostlyQ4_0 => write!(f, "q4_0"),
             FileType::MostlyQ4_1 => write!(f, "q4_1"),
-            FileType::MostlyQ4_1SomeF16 => write!(f, "q4_1_with_f16"),
             FileType::MostlyQ4_2 => write!(f, "q4_2"),
             FileType::MostlyQ4_3 => write!(f, "q4_3"),
             FileType::MostlyQ5_0 => write!(f, "q5_0"),
