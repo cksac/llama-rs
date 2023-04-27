@@ -47,6 +47,10 @@ pub enum Type {
     Q8_0,
     /// Quantized 8-bit (type 1). used by GPTQ.
     Q8_1,
+    /// Integer 8-bit.
+    I8,
+    /// Integer 16-bit.
+    I16,        
     /// Integer 32-bit.
     I32,
     /// Float 16-bit.
@@ -70,6 +74,9 @@ impl TryFrom<i32> for Type {
             7 => Ok(Type::Q5_1),
             8 => Ok(Type::Q8_0),
             9 => Ok(Type::Q8_1),
+            10 => Ok(Type::I8),
+            11 => Ok(Type::I16),
+            12 => Ok(Type::I32),
             _ => Err(()),
         }
     }
@@ -88,7 +95,9 @@ impl From<Type> for i32 {
             Type::Q5_1 => 7,
             Type::Q8_0 => 8,
             Type::Q8_1 => 9,
-            Type::I32 => 10, // TODO: check this
+            Type::I8 => 10,
+            Type::I16 => 11,
+            Type::I32 => 12,
         }
     }
 }
@@ -104,6 +113,8 @@ impl From<Type> for ggml_sys::ggml_type {
             Type::Q5_1 => ggml_sys::ggml_type_GGML_TYPE_Q5_1,
             Type::Q8_0 => ggml_sys::ggml_type_GGML_TYPE_Q8_0,
             Type::Q8_1 => ggml_sys::ggml_type_GGML_TYPE_Q8_1,
+            Type::I8 => ggml_sys::ggml_type_GGML_TYPE_I8,
+            Type::I16 => ggml_sys::ggml_type_GGML_TYPE_I16,
             Type::I32 => ggml_sys::ggml_type_GGML_TYPE_I32,
             Type::F16 => ggml_sys::ggml_type_GGML_TYPE_F16,
             Type::F32 => ggml_sys::ggml_type_GGML_TYPE_F32,
@@ -140,6 +151,8 @@ impl std::fmt::Display for Type {
             Type::Q5_1 => write!(f, "q5_1"),
             Type::Q8_0 => write!(f, "q8_0"),
             Type::Q8_1 => write!(f, "q8_1"),
+            Type::I8 => write!(f, "i8"),
+            Type::I16 => write!(f, "i16"),
             Type::I32 => write!(f, "i32"),
             Type::F16 => write!(f, "f16"),
             Type::F32 => write!(f, "f32"),
